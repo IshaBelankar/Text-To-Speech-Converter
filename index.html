@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Text to a speech converter</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+      }
+      .container {
+        width: 100%;
+        height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        background: linear-gradient(45deg, #040739, #2a73ab);
+      }
+      .container h1 {
+        margin-top: -50px;
+        margin-bottom: 50px;
+        color: #fff;
+        font-size: 4rem;
+      }
+      .container h1 span {
+        color: #69d8fa;
+      }
+      .container textarea {
+        width: 600px;
+        height: 250px;
+        background: #d2d1e0;
+        color: #040404;
+        font-size: 1.2rem;
+        padding: 20px;
+        border-radius: 5px;
+        margin-bottom: 30px;
+        border: ipx solid black;
+        outline: none;
+        resize: none;
+      }
+      .container textarea::placeholder {
+        color: #0a0909;
+        font-size: 16px;
+      }
+      .container .row p {
+        font-size: 1.5rem;
+        color: #d2d1e0;
+        margin-top: 7px;
+        margin-bottom: 2px;
+      }
+      .container .row button {
+        /* margin-left: 30%; */
+        /* margin-top: 20px; */
+        /* display: flex;
+        align-items: center;
+        justify-content: center; */
+        background: #285ec9;
+        color: #fff;
+        font-size: 1.2rem;
+        padding: 10px 30px;
+        border-radius: 10px;
+        border: none;
+        outline: none;
+        cursor: pointer;
+        margin-left: 60px;
+        margin-top: 35px;
+        /* flex-direction: row; */
+        }
+        select{
+            color: #0a0a0a;
+            font-weight: bold;
+            appearance: none;
+            background: #1ea9d3;
+            border: none;
+            outline: none;
+            padding: 10px 20px;
+            border-radius: 10px;
+            height: 50px;
+        }
+        .row{
+          display: flex;
+          align-items: center;
+        }
+        
+    </style>
+    <script src="https://kit.fontawesome.com/f718c30a72.js" crossorigin="anonymous"></script>
+  </head>
+  <body>
+    <div class="container">
+        <h1>Text To Speech <span>
+            Converter
+        </span></h1>
+        <textarea placeholder="Write anything here.." id="text"></textarea>
+
+        <div class="row">
+            <div>
+              <p>Select the language:</p>
+            <select id="voices"></select>
+            </div>
+            <button id="play"><i class="fa-solid fa-play"></i> Convert to speech</button>
+        </div>
+    </div>
+    <script>
+        //here we are using webspeechapi provided by javascript to convert text to speech
+        //first we will create a new speech object
+        //It consist of speechseynthesis which enables text to voice conversion
+
+        //first we will create a new speech object
+        //next step is to specify trext content using text properties 
+
+        //Finally, call the speak() method, which will speak the given utterance (SpeechSynthesisUtterance object) defined above.
+        let speech=new SpeechSynthesisUtterance();
+        //we will get all the voices available in the system
+
+        let voiceselect=document.getElementById("voices");
+       
+        function voices(){
+            for(let voice of speechSynthesis.getVoices()){
+                let option=`<option value="${voice.name}">${voice.name}</option>`
+                voiceselect.insertAdjacentHTML("beforeend",option);
+            }
+        }
+        speechSynthesis.addEventListener("voiceschanged",voices)
+
+        var msg=document.getElementById("text");
+        var play=document.getElementById("play");
+        play.addEventListener("click",()=>{
+            for(let voice of speechSynthesis.getVoices()){
+                if(voice.name === voiceselect.value){
+                    speech.voice=voice;
+                }
+            }
+            speech.text=msg.value;
+            speech.volume=1
+            speechSynthesis.speak(speech);
+            speech.lang="en-US";
+        })
+
+    </script>
+  </body>
+</html>
